@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <link rel="stylesheet" type="text/css" href="css/register.css" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script  src = "https://unpkg.com/axios/dist/axios.min.js" > </script>
+</head>
+
+<body>
+
+    <div class="group" id="app">
+        <div class="group_title">
+            <h1>用户注册</h1>
+        </div>
+        <div class="group_content">
+            <form >
+                <ul>
+                    <li>
+                        <input @blur="checkname" type="text" placeholder="用户名" v-model="name" />
+                        <span v-text="msgname"></span>
+                    </li>
+                    <li>
+                        <input @blur="checkpwd" type="password" placeholder="密码(同时含有数字和字母，且长度在8-20位之间)" v-model="pwd" id="pwd" />
+                        <span v-text="msgpwd"></span>
+                    </li>
+                    <li>
+                        <input @blur="checkdpwd" type="password" placeholder="确认密码" v-model="dpwd" />
+                        <span v-text="msgdpwd"></span>
+                    </li>
+                    <li>
+                        <input @blur="checkphone" type="text" placeholder="手机号" v-model="phone" id="phone" />
+                        <span v-text="msgphone"></span>
+                    </li>
+                    <li>
+                        <input @blur="checkemail" type="email" placeholder="邮箱" v-model="email" id="email" />
+                        <span v-text="msgemail"></span>
+                    </li>
+
+                </ul>
+                <input @click="submit" type="submit" value="注册" class="button_submit" />
+                <input type="reset" value="重新输入" class="button_reset" />
+            </form>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+
+            data: {
+
+                name: "",
+                msgname: "",
+                pwd: "",
+                msgpwd: "",
+                dpwd: "",
+                msgdpwd: "",
+                phone: "",
+                msgphone: "",
+                email: "",
+                msgemail: "",
+
+                
+
+            },
+            methods: {
+                
+                checkname: function () {
+                    if (this.name == "") {
+                        this.msgname = "用户名不能为空";
+                        // console.log("111")
+                    } else {
+                        this.msgname = "";
+                    }
+                },
+                checkpwd: function () {
+                    var pwdCheck = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$/;      //数字和字母组成，并且要同时含有数字和字母，且长度要在8-20位之间。
+                    var pwdValue = $('#pwd').val();
+                    if (this.pwd == "") {
+                        this.msgpwd = "密码不能为空";
+                    } else if (!pwdCheck.test(pwdValue)) {
+                        this.msgpwd = "密码不合法，请重新输入";
+                    } else {
+                        this.msgpwd = ""
+                    }
+                },
+                checkdpwd: function () {
+                    if (this.dpwd == "") {
+                        this.msgdpwd = "再次输入密码不能为空"
+                    } else if (this.dpwd != this.pwd) {
+                        this.msgdpwd = "两次输入的密码不一致，请重新输入";
+                    } else {
+                        this.msgdpwd = "";
+                    }
+                },
+                checkphone:function(){
+                    var phoneCheck = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
+                    var phoneValue = $('#phone').val();
+                    if(this.phone == ""){
+                        this.msgphone = "手机号码不能为空";
+                    }else if(!phoneCheck.test(phoneValue)){
+                        this.msgphone = "手机号码不合法，请重新输入";
+                    }else{
+                        this.msgphone = "";
+                    }
+                },
+                checkemail:function(){
+                    var emailCheck = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                    var emailValue = $("#email").val();
+                    if(this.email == ""){
+                        this.msgemail = "邮箱不能为空";
+                    }else if(!emailCheck.test(emailValue)){
+                        this.msgemail = "邮箱格式不合法";
+                    }else{
+                        this.msgemail = "";
+                    }
+                },
+                submit:function(){
+                    var that = this;
+                    axios.post("http://123.com",{name:that.name,pwd:that.pwd,phone:that.phone,email:that.email})
+                    .then(function(response){
+                        console.log("222");
+                    },function(err){
+                        console.log("111");
+                    })
+                }
+
+
+            }
+
+        })
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>
